@@ -1,0 +1,19 @@
+id = "fixtures/kitchen/range-30in"
+name = "Range — 30 in. four-burner"
+category = "fixtures/kitchen"
+discipline = "A"
+tags = ["range", "stove", "kitchen", "appliance"]
+default_layer = "A-FLOR-APPL"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "RANGE-30IN"
+
+[size]
+width = 30.0
+depth = 25.0
+height = 36.0
+units = "inches"
+
+[files]
+block = "block.dwg"

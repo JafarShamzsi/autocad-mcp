@@ -1,0 +1,19 @@
+id = "furniture/beds/bed-king"
+name = "Bed — king"
+category = "furniture/beds"
+discipline = "I"
+tags = ["bed", "king", "bedroom", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "BED-KING"
+
+[size]
+width = 76.0
+depth = 80.0
+height = 24.0
+units = "inches"
+
+[files]
+block = "block.dwg"

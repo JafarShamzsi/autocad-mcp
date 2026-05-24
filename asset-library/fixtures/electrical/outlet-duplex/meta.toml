@@ -1,0 +1,13 @@
+id = "fixtures/electrical/outlet-duplex"
+name = "Outlet — duplex receptacle"
+category = "fixtures/electrical"
+discipline = "E"
+tags = ["outlet", "receptacle", "electrical", "duplex"]
+default_layer = "E-POWR"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "OUTLET-DUPLEX"
+
+[files]
+block = "block.dwg"

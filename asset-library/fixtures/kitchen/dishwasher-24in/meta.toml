@@ -1,0 +1,19 @@
+id = "fixtures/kitchen/dishwasher-24in"
+name = "Dishwasher — 24 in. built-in"
+category = "fixtures/kitchen"
+discipline = "A"
+tags = ["dishwasher", "kitchen", "appliance"]
+default_layer = "A-FLOR-APPL"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "DISHWASHER-24IN"
+
+[size]
+width = 24.0
+depth = 24.0
+height = 34.0
+units = "inches"
+
+[files]
+block = "block.dwg"

@@ -1,0 +1,13 @@
+id = "annotation/stairs/stair-marker-up"
+name = "Stair direction marker (UP)"
+category = "annotation/stairs"
+discipline = "A"
+tags = ["stair", "up", "annotation"]
+default_layer = "A-FLOR-STRS"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "STAIR-MARKER-UP"
+
+[files]
+block = "block.dwg"

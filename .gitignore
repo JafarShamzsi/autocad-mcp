@@ -1,0 +1,104 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.venv-win/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# AutoCAD temporary files
+*.bak
+*.sv$
+*.dwl
+*.dwl2
+
+# Log files
+*.log
+
+# Claude Code workspace state (transient: ~/.claude-like settings, command
+# history, etc.). The shipped skill + subagent now live at /skills/ + /agents/
+# under the plugin root, so .claude/ no longer needs a whitelist.
+.claude/
+
+# User-specific configuration
+claude_desktop_config.json
+
+# Local test files
+test_*.dwg
+temp_*.lsp
+
+# Root-level sample drawings: dev fixtures, not part of the shipped library.
+# Move to tests/fixtures/ if they become part of an automated test.
+/1BR_Cottage_A-101.*
+/Apartment_3BR_Plan.*
+
+# Third-party AEC block library (88 DWGs, ~50 MB). Vendor licensing
+# unclear — must not be committed to a repo published under MIT. Keep
+# the directory locally for development but ignore from git.
+/furniture and details/
+
+# CTO Library (not included in repo)
+PIDv4-CTO/
+
+# Asset library SQLite cache — derived from meta.toml + block.dxf on disk,
+# rebuilt by `library.catalog_reindex`. Not tracked.
+asset-library/.acad-library.db
+asset-library/**/.acad-library.db
+
+# Per-user vendor assets — keep manufacturer CAD downloads (Kohler, Toto,
+# Knoll, etc.) under asset-library/vendor/ and don't commit them. See
+# asset-library/CONTRIBUTING-ASSETS.md for licensing rationale.
+asset-library/vendor/
+
+# Visual Studio / Rider IDE state
+.vs/
+*.sln.docstates
+
+# pytest
+.pytest_cache/
+
+# .NET build artifacts. Note: bin/dotnet/ at the repo root is the
+# canonical drop location for the pre-built SheetSetReader.dll the
+# Python side loads via NETLOAD — that file MUST be tracked, hence the
+# explicit !-exception below. The per-project bin/obj under dotnet/
+# subprojects are transient build outputs.
+dotnet/**/bin/
+dotnet/**/obj/
+!bin/dotnet/
+!bin/dotnet/*.dll

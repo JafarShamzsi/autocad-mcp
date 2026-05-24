@@ -1,0 +1,19 @@
+id = "furniture/storage/file-cabinet-4drawer"
+name = "File cabinet — 4-drawer lateral"
+category = "furniture/storage"
+discipline = "I"
+tags = ["filing", "cabinet", "office", "storage", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "FILE-CABINET-4DRAWER"
+
+[size]
+width = 36.0
+depth = 18.0
+height = 54.0
+units = "inches"
+
+[files]
+block = "block.dwg"

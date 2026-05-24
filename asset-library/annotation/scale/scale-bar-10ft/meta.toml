@@ -1,0 +1,13 @@
+id = "annotation/scale/scale-bar-10ft"
+name = "Scale bar — 10 ft"
+category = "annotation/scale"
+discipline = "A"
+tags = ["scale", "bar", "annotation"]
+default_layer = "A-ANNO-SYMB"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "SCALE-BAR-10FT"
+
+[files]
+block = "block.dwg"

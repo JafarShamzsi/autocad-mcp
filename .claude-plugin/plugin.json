@@ -1,0 +1,21 @@
+{
+  "name": "autocad-mcp",
+  "version": "3.2.0",
+  "description": "AutoCAD automation + architectural drafting for Claude. Drives full AutoCAD via COM, AutoCAD LT via the file-IPC dispatcher, or generates DXFs headlessly via ezdxf. Ships the `architectural-drafting` skill and the `autocad-architect` subagent, plus a project model that indexes DWG/DXF projects into SQLite for audits (AIA layer compliance, broken XREFs, dim/text style drift, sheet sets).",
+  "author": {
+    "name": "Jafar-Shamszi",
+    "url": "https://github.com/JafarShamzsi/autocad-mcp-main"
+  },
+  "homepage": "https://github.com/JafarShamzsi/autocad-mcp-main",
+  "repository": "https://github.com/JafarShamzsi/autocad-mcp-main",
+  "license": "",
+  "keywords": [
+    "autocad",
+    "cad",
+    "architecture",
+    "drafting",
+    "dwg",
+    "dxf",
+    "mcp"
+  ]
+}

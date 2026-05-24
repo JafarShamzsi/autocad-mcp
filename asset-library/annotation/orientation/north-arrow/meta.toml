@@ -1,0 +1,13 @@
+id = "annotation/orientation/north-arrow"
+name = "North arrow"
+category = "annotation/orientation"
+discipline = "A"
+tags = ["north", "compass", "orientation", "annotation"]
+default_layer = "A-ANNO-SYMB"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "NORTH-ARROW"
+
+[files]
+block = "block.dwg"

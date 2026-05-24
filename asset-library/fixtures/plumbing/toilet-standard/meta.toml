@@ -1,0 +1,19 @@
+id = "fixtures/plumbing/toilet-standard"
+name = "Toilet — standard tank type"
+category = "fixtures/plumbing"
+discipline = "P"
+tags = ["toilet", "wc", "fixture", "bathroom", "plumbing"]
+default_layer = "P-FIXT"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "TOILET-STANDARD"
+
+[size]
+width = 20.0
+depth = 28.0
+height = 30.0
+units = "inches"
+
+[files]
+block = "block.dwg"

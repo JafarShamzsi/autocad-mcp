@@ -1,0 +1,94 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    SheetSetReader — NETLOAD'd assembly that reads AutoCAD 2024+ binary
+    .dst sheet-set files using the in-process AcSmSheetSetMgr COM API.
+
+    Build:   dotnet build -c Release dotnet/SheetSetReader/SheetSetReader.csproj
+    Output:  dotnet/SheetSetReader/bin/Release/net10.0-windows/SheetSetReader.dll
+
+    Distribution: copy the built DLL to `bin/dotnet/SheetSetReader.dll`
+    (already on the gitignore-out side; ship pre-built for the plugin
+    install path) or NETLOAD from the build output directly.
+
+    Tested against: AutoCAD 2027 R26.0.60, .NET 10.0.300 SDK.
+
+    Why a DLL and not an exe: AcSmSheetSetMgr only exposes its full vtable
+    when running inside AutoCAD's process. CoCreateInstance from an
+    external process returns an IUnknown-only stub (E_NOINTERFACE on
+    QI for IAcSmSheetSetMgr — verified empirically). NETLOAD into a
+    running AutoCAD is the only path the API supports today.
+
+    AutoCAD year discovery:
+      The HintPaths used to be hardcoded to AutoCAD 2027. They now probe
+      the standard install roots for any AutoCAD year, preferring newer
+      releases (2027 → 2024). Override at build time with:
+        dotnet build -c Release /p:AutoCADInstallDir="C:\Program Files\Autodesk\AutoCAD 2025"
+  -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RootNamespace>AutocadMcp.SheetSetReader</RootNamespace>
+    <AssemblyName>SheetSetReader</AssemblyName>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <!-- AutoCAD's managed assemblies aren't strong-named; let ours follow suit. -->
+    <SignAssembly>false</SignAssembly>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <!-- Resolve AutoCAD install dir: explicit `/p:AutoCADInstallDir=` first,
+       then probe newest-to-oldest under common Program Files roots. MSBuild
+       evaluates these top-to-bottom, so the first match wins; once the
+       property is set, later conditions short-circuit.
+
+       Add more years here as they ship (just prepend the new entry — newer
+       AutoCAD is preferred). Listing them explicitly keeps MSBuild item
+       functions out of the picture (no sort operator exists). -->
+  <PropertyGroup>
+    <_AcadProbeRoots Condition="'$(_AcadProbeRoots)' == ''">$(ProgramFiles)\Autodesk;C:\Program Files\Autodesk;C:\Program Files (x86)\Autodesk;D:\Program Files\Autodesk</_AcadProbeRoots>
+  </PropertyGroup>
+
+  <!-- AutoCAD 2027 → 2024, in each candidate root. Order matters: newest year
+       wins. -->
+  <PropertyGroup Condition="'$(AutoCADInstallDir)' == ''">
+    <AutoCADInstallDir Condition="Exists('$(ProgramFiles)\Autodesk\AutoCAD 2028\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2028</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2027\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2027</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2026\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2026</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2025\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2025</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2024\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2024</AutoCADInstallDir>
+    <!-- x86 Program Files fallback for older 32-bit-host installs -->
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2027\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2027</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2026\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2026</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2025\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2025</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2024\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2024</AutoCADInstallDir>
+    <!-- D:\ install root fallback -->
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('D:\Program Files\Autodesk\AutoCAD 2027\acmgd.dll')">D:\Program Files\Autodesk\AutoCAD 2027</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('D:\Program Files\Autodesk\AutoCAD 2026\acmgd.dll')">D:\Program Files\Autodesk\AutoCAD 2026</AutoCADInstallDir>
+  </PropertyGroup>
+
+  <Target Name="VerifyAutoCADInstallDir" BeforeTargets="ResolveAssemblyReferences">
+    <Error
+      Text="AutoCAD install directory not found. Searched standard Program Files roots for AutoCAD 2024-2028 with acmgd.dll. Pass /p:AutoCADInstallDir=&quot;C:\path\to\AutoCAD YYYY&quot; to override."
+      Condition="'$(AutoCADInstallDir)' == '' or !Exists('$(AutoCADInstallDir)\acmgd.dll')" />
+    <Message Importance="high" Text="SheetSetReader: building against $(AutoCADInstallDir)" />
+  </Target>
+
+  <ItemGroup>
+    <!-- AutoCAD ObjectARX .NET assemblies. Private="false" keeps them out of
+         the output bin — AutoCAD provides them to the load context. -->
+    <Reference Include="AcMgd"
+               HintPath="$(AutoCADInstallDir)\acmgd.dll"
+               Private="false" />
+    <Reference Include="AcCoreMgd"
+               HintPath="$(AutoCADInstallDir)\accoremgd.dll"
+               Private="false" />
+    <Reference Include="AcDbMgd"
+               HintPath="$(AutoCADInstallDir)\acdbmgd.dll"
+               Private="false" />
+    <Reference Include="AcSmComponents.Interop"
+               HintPath="$(AutoCADInstallDir)\AcSmComponents.Interop.dll"
+               Private="false" />
+  </ItemGroup>
+</Project>

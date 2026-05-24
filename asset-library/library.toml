@@ -1,0 +1,10 @@
+# Asset library catalog config — see docs/library-spec.md.
+[library]
+name = "autocad-mcp starter library"
+version = "0.1.0"
+description = "CC0 starter assets for floor-plan drafting"
+
+[default_layers]
+# Overrides for the meta.toml default_layer when the asset's discipline
+# matches one of these keys. Empty by default — assets carry their own
+# default_layer in meta.toml.

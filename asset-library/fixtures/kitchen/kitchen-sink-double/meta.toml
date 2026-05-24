@@ -1,0 +1,19 @@
+id = "fixtures/kitchen/kitchen-sink-double"
+name = "Kitchen sink — double bowl"
+category = "fixtures/kitchen"
+discipline = "P"
+tags = ["sink", "kitchen", "double", "fixture"]
+default_layer = "P-FIXT"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "KITCHEN-SINK-DOUBLE"
+
+[size]
+width = 33.0
+depth = 22.0
+height = 9.0
+units = "inches"
+
+[files]
+block = "block.dwg"

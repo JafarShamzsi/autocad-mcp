@@ -1,0 +1,19 @@
+id = "fixtures/plumbing/bathtub-60in"
+name = "Bathtub — 60 in. alcove"
+category = "fixtures/plumbing"
+discipline = "P"
+tags = ["tub", "bathtub", "alcove", "bathroom", "fixture"]
+default_layer = "P-FIXT"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "BATHTUB-60IN"
+
+[size]
+width = 60.0
+depth = 30.0
+height = 16.0
+units = "inches"
+
+[files]
+block = "block.dwg"

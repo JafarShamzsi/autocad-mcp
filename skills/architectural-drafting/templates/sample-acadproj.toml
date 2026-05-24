@@ -1,0 +1,52 @@
+# Sample .acadproj.toml — drop this at the root of your project, edit, save as `.acadproj.toml`.
+#
+# All paths are resolved relative to this file. The MCP server discovers
+# drawings, builds a SQLite index next to this file (`.acadproj.db`), and
+# the `project` tool then answers questions like "what's on A-DOOR across
+# every floor plan?" or "any broken XREFs?".
+#
+# Both `.dxf` and `.dwg` are supported. DWG support requires one of:
+#   - Full AutoCAD installed (provides `accoreconsole.exe` — preferred), OR
+#   - ODA File Converter (free, https://www.opendesign.com/guestfiles/oda_file_converter).
+
+[project]
+name = "Example House"
+units = "feet"          # "feet" | "inches" | "meters" | "millimeters"
+scale = 0.25            # 1/4" = 1'-0"  →  0.25; metric usually 0.01 or 0.02.
+
+[standards]
+layer_standard = "AIA"  # "AIA" | "NCS" | "custom"
+# Optional reference DXF the firm uses as its drawing standard. The
+# `check_standard` operation can be pointed at this with
+# data = {"standard": "<path>"}.
+# dws_file = "./standards/firm-standards.dxf"
+
+# Optional AutoCAD sheet set. When set, `project.list_sheets` and
+# `project.find_sheets_for_drawing` operate on its contents; sheets whose
+# underlying DWG is missing on disk show `is_dwg_present = false`.
+# [sheetset]
+# file = "./MyProject.dst"
+
+[paths]
+# Directories searched for blocks, linetypes, etc. Mostly informational for now;
+# the indexer doesn't yet walk these for support files.
+support = [".", "./blocks"]
+
+# ---------------------------------------------------------------------------
+# Drawings — every DXF in the project. Add one [[drawings]] block per file.
+# ---------------------------------------------------------------------------
+
+[[drawings]]
+name = "FloorPlan-1"
+file = "fp1.dwg"        # .dwg or .dxf, both supported
+discipline = "A"        # AIA discipline code: A, S, M, E, P, C, L
+
+[[drawings]]
+name = "FloorPlan-2"
+file = "fp2.dwg"
+discipline = "A"
+
+[[drawings]]
+name = "Elevations"
+file = "elev.dxf"
+discipline = "A"

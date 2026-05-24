@@ -1,0 +1,19 @@
+id = "furniture/tables/table-dining-rectangle"
+name = "Dining table — rectangular 6-seat"
+category = "furniture/tables"
+discipline = "I"
+tags = ["table", "dining", "rectangle", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "TABLE-DINING-RECTANGLE"
+
+[size]
+width = 72.0
+depth = 36.0
+height = 30.0
+units = "inches"
+
+[files]
+block = "block.dwg"

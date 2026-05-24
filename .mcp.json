@@ -1,0 +1,20 @@
+{
+  "_comment": "uv run ensures the project venv is created + synced before launching the server. Cross-platform (no Windows-only Scripts/python.exe path) and means there's no separate post-install step.",
+  "mcpServers": {
+    "autocad": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${CLAUDE_PLUGIN_ROOT}",
+        "python",
+        "-m",
+        "autocad_mcp"
+      ],
+      "env": {
+        "AUTOCAD_MCP_BACKEND": "auto"
+      }
+    }
+  }
+}
+

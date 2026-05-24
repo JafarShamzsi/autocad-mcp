@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    MCPReactor — NETLOAD'd .NET ManagedReactor for the autocad-mcp event log.
+
+    Replaces the partially-deprecated `vlr-acdb-reactor :vlr-objectappended`
+    LISP path on AutoCAD 2024+. The Managed API's `Database.ObjectAppended`
+    fires reliably for every new entity regardless of whether it came from a
+    command, AcDb transaction, or arbitrary .NET caller.
+
+    Build:   dotnet build -c Release dotnet/MCPReactor/MCPReactor.csproj
+    Output:  dotnet/MCPReactor/bin/Release/net10.0-windows/MCPReactor.dll
+    Deploy:  copy to bin/dotnet/MCPReactor.dll (tracked in repo, same convention
+             as SheetSetReader.dll)
+
+    Tested against: AutoCAD 2027 R26.0.60, .NET 10.0.300 SDK.
+
+    Output schema (one JSON object per line, appended to
+    `<AUTOCAD_MCP_IPC_DIR>/autocad_mcp_events.log`):
+      {"ts": 0.0, "ts_local": <seconds-since-1970>,
+       "kind": "<event>", "handle": "<hex>", "entity_type": "<DXFTYPE>",
+       "layer": "<layer-name>"
+       , "command": "<COMMAND>"  // only on command_will_start / _ended
+       }
+
+    Matches the LISP reactor's schema so `EventTail` and the `events.recent`
+    tool work unchanged. The new reactor adds:
+      - `selection_changed` events (count + handles)
+      - reliable `object_modified` on AutoCAD 2024+ (the LISP path missed many)
+  -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RootNamespace>AutocadMcp.Reactor</RootNamespace>
+    <AssemblyName>MCPReactor</AssemblyName>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <SignAssembly>false</SignAssembly>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <!-- AutoCAD year discovery (same probe as SheetSetReader.csproj). -->
+  <PropertyGroup Condition="'$(AutoCADInstallDir)' == ''">
+    <AutoCADInstallDir Condition="Exists('$(ProgramFiles)\Autodesk\AutoCAD 2028\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2028</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2027\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2027</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2026\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2026</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2025\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2025</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('$(ProgramFiles)\Autodesk\AutoCAD 2024\acmgd.dll')">$(ProgramFiles)\Autodesk\AutoCAD 2024</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2027\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2027</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2026\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2026</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2025\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2025</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('C:\Program Files (x86)\Autodesk\AutoCAD 2024\acmgd.dll')">C:\Program Files (x86)\Autodesk\AutoCAD 2024</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('D:\Program Files\Autodesk\AutoCAD 2027\acmgd.dll')">D:\Program Files\Autodesk\AutoCAD 2027</AutoCADInstallDir>
+    <AutoCADInstallDir Condition="'$(AutoCADInstallDir)' == '' and Exists('D:\Program Files\Autodesk\AutoCAD 2026\acmgd.dll')">D:\Program Files\Autodesk\AutoCAD 2026</AutoCADInstallDir>
+  </PropertyGroup>
+
+  <Target Name="VerifyAutoCADInstallDir" BeforeTargets="ResolveAssemblyReferences">
+    <Error
+      Text="AutoCAD install directory not found. Pass /p:AutoCADInstallDir=&quot;C:\path\to\AutoCAD YYYY&quot; to override."
+      Condition="'$(AutoCADInstallDir)' == '' or !Exists('$(AutoCADInstallDir)\acmgd.dll')" />
+    <Message Importance="high" Text="MCPReactor: building against $(AutoCADInstallDir)" />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="AcMgd"
+               HintPath="$(AutoCADInstallDir)\acmgd.dll"
+               Private="false" />
+    <Reference Include="AcCoreMgd"
+               HintPath="$(AutoCADInstallDir)\accoremgd.dll"
+               Private="false" />
+    <Reference Include="AcDbMgd"
+               HintPath="$(AutoCADInstallDir)\acdbmgd.dll"
+               Private="false" />
+  </ItemGroup>
+</Project>

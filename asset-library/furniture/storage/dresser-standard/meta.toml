@@ -1,0 +1,19 @@
+id = "furniture/storage/dresser-standard"
+name = "Dresser — 6-drawer"
+category = "furniture/storage"
+discipline = "I"
+tags = ["dresser", "storage", "bedroom", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "DRESSER-STANDARD"
+
+[size]
+width = 60.0
+depth = 20.0
+height = 36.0
+units = "inches"
+
+[files]
+block = "block.dwg"

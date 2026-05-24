@@ -1,0 +1,19 @@
+id = "fixtures/kitchen/refrigerator-36in"
+name = "Refrigerator — 36 in. side-by-side"
+category = "fixtures/kitchen"
+discipline = "A"
+tags = ["fridge", "refrigerator", "kitchen", "appliance"]
+default_layer = "A-FLOR-APPL"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "REFRIGERATOR-36IN"
+
+[size]
+width = 36.0
+depth = 30.0
+height = 70.0
+units = "inches"
+
+[files]
+block = "block.dwg"

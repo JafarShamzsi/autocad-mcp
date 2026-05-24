@@ -1,0 +1,69 @@
+name: CI
+
+# Default test suite — pure-Python ezdxf path. The integration suite needs a
+# running AutoCAD instance and is excluded by default via the `-m` marker in
+# pyproject.toml. Maintainers run the integration suite manually via
+# `scripts/run_integration.ps1` against a Windows workstation.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  default-tests:
+    name: pytest (default)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Sync dependencies
+        run: uv sync --all-extras
+
+      - name: Run tests
+        run: uv run pytest tests/ -v --tb=short
+
+  lint:
+    name: structural checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate pyproject.toml + plugin manifest
+        run: |
+          python - <<'PY'
+          import json, sys
+          import tomllib
+          with open("pyproject.toml", "rb") as f:
+              pyproject = tomllib.load(f)
+          with open(".claude-plugin/plugin.json") as f:
+              plugin = json.load(f)
+          py_ver = pyproject["project"]["version"]
+          pl_ver = plugin["version"]
+          if py_ver != pl_ver:
+              sys.exit(f"version drift: pyproject={py_ver} plugin={pl_ver}")
+          print(f"version consistent: {py_ver}")
+          PY

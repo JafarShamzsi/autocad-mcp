@@ -1,0 +1,19 @@
+id = "furniture/seating/sofa-84-modern"
+name = "Sofa — 84 in. three-seat"
+category = "furniture/seating"
+discipline = "I"
+tags = ["sofa", "couch", "seating", "living-room", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "SOFA-84-MODERN"
+
+[size]
+width = 84.0
+depth = 36.0
+height = 32.0
+units = "inches"
+
+[files]
+block = "block.dwg"

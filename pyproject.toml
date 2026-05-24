@@ -1,0 +1,39 @@
+[project]
+name = "autocad-mcp"
+version = "3.2.0"
+description = "MCP server for AutoCAD automation, architectural drafting, and headless DXF generation"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    # Upper bounds are pessimistic by design — major bumps in any of these
+    # libraries are the leading cause of surprise breakage. Loosen here only
+    # after testing against a newer major.
+    "mcp[cli]>=1.2.1,<2.0",
+    "ezdxf>=1.0,<2.0",
+    "matplotlib>=3.7,<4.0",
+    "Pillow>=10.0.0,<12.0",
+    "structlog>=24.0.0,<26.0",
+    "pywin32>=305; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/autocad_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "integration: requires a running full AutoCAD (not LT). Skipped by default; enable with `pytest -m integration`.",
+]
+addopts = "-m 'not integration'"

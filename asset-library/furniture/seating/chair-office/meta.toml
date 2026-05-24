@@ -1,0 +1,19 @@
+id = "furniture/seating/chair-office"
+name = "Office chair — task"
+category = "furniture/seating"
+discipline = "I"
+tags = ["chair", "office", "task", "seating", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "CHAIR-OFFICE"
+
+[size]
+width = 24.0
+depth = 24.0
+height = 36.0
+units = "inches"
+
+[files]
+block = "block.dwg"

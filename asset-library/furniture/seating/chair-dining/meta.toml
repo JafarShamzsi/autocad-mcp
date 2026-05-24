@@ -1,0 +1,19 @@
+id = "furniture/seating/chair-dining"
+name = "Dining chair"
+category = "furniture/seating"
+discipline = "I"
+tags = ["chair", "dining", "seating", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "CHAIR-DINING"
+
+[size]
+width = 18.0
+depth = 18.0
+height = 36.0
+units = "inches"
+
+[files]
+block = "block.dwg"

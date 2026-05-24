@@ -1,0 +1,19 @@
+id = "fixtures/plumbing/shower-36sq"
+name = "Shower — 36 in. square"
+category = "fixtures/plumbing"
+discipline = "P"
+tags = ["shower", "stall", "bathroom", "fixture"]
+default_layer = "P-FIXT"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "SHOWER-36SQ"
+
+[size]
+width = 36.0
+depth = 36.0
+height = 80.0
+units = "inches"
+
+[files]
+block = "block.dwg"

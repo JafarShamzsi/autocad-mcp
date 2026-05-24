@@ -1,0 +1,19 @@
+id = "furniture/desks/desk-60in"
+name = "Desk — 60 in."
+category = "furniture/desks"
+discipline = "I"
+tags = ["desk", "office", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "DESK-60IN"
+
+[size]
+width = 60.0
+depth = 30.0
+height = 30.0
+units = "inches"
+
+[files]
+block = "block.dwg"

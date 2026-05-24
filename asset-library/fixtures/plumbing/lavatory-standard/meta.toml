@@ -1,0 +1,19 @@
+id = "fixtures/plumbing/lavatory-standard"
+name = "Lavatory — wall-hung"
+category = "fixtures/plumbing"
+discipline = "P"
+tags = ["lav", "lavatory", "sink", "bathroom", "fixture"]
+default_layer = "P-FIXT"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "LAVATORY-STANDARD"
+
+[size]
+width = 20.0
+depth = 18.0
+height = 34.0
+units = "inches"
+
+[files]
+block = "block.dwg"

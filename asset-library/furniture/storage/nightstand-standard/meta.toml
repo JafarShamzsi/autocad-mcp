@@ -1,0 +1,19 @@
+id = "furniture/storage/nightstand-standard"
+name = "Nightstand"
+category = "furniture/storage"
+discipline = "I"
+tags = ["nightstand", "bedside", "bedroom", "furniture"]
+default_layer = "I-FURN"
+license = "CC0-1.0"
+inserts_as = "block"
+# Block name inside the file — uppercased asset dir name
+block_name = "NIGHTSTAND-STANDARD"
+
+[size]
+width = 24.0
+depth = 18.0
+height = 26.0
+units = "inches"
+
+[files]
+block = "block.dwg"
