@@ -1,0 +1,18 @@
+{
+  "_comment": "Native C++ preview profile. The wrapper builds cpp/build/autocad-mcp-native.exe if missing, redirects build logs to stderr so MCP stdout stays framed, then launches the native server.",
+  "mcpServers": {
+    "autocad-native": {
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${CLAUDE_PLUGIN_ROOT}\\scripts\\run_native_mcp.ps1"
+      ],
+      "env": {
+        "AUTOCAD_MCP_BACKEND": "auto"
+      }
+    }
+  }
+}

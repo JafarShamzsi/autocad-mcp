@@ -9,10 +9,55 @@ Three backends, one API:
 | **COM**       | Windows Python   | Yes — full AutoCAD 2018+ (Windows)       | Win32 PrintWindow   |
 | **File IPC**  | Windows Python   | Yes — AutoCAD LT 2024+ (Windows)         | Win32 PrintWindow   |
 | **ezdxf**     | Any platform     | No (headless)                            | matplotlib render   |
+| **Native C++** | Windows C++ preview | No for headless DXF; AutoCAD via native COM/File IPC | Win32/WIC for COM; headless DXF no PNG |
 
 The server exposes **14 consolidated tools** (`drawing`, `entity`, `layer`, `block`, `annotation`, `pid`, `arch`, `project`, `library`, `style`, `express`, `events`, `view`, `system`) over the MCP stdio transport. An MCP client (Claude Desktop, Claude Code, etc.) connects and drives AutoCAD through natural-language requests.
 
 In `auto` mode the backend priority is **COM** (full AutoCAD running) → **File IPC** (LT window available) → **ezdxf** (headless fallback).
+
+## Native C++ Preview
+
+A native C++ MCP server is being staged under `cpp/` as the replacement path
+for the Python server. It already builds as `cpp/build/autocad-mcp-native.exe`,
+implements stdio MCP framing, exposes the same 14 tool names, includes native
+File IPC transport for AutoCAD LT, a native COM backend for full AutoCAD, and a
+dependency-free headless DXF backend. Native COM now covers drawing
+create/open/save/info, PDF plotting, layouts, entity create/query/edit,
+selection/osnap, hatches, regions, extrusion/revolve/booleans, layers, blocks,
+XREFs, annotations, styles, zoom, and Win32/WIC screenshots. The headless DXF
+backend covers common drawing/entity/layer/block/annotation operations plus
+procedural P&ID, AIA/NCS architectural helpers, style state, named views, layer
+states, an in-process event cursor, a native starter symbol library,
+native-lite active drawing project queries, and headless express-tool
+emulations.
+
+Build and smoke-test it on Windows:
+
+```powershell
+.\scripts\build_native.ps1
+uv run python scripts/smoke_native_mcp.py
+```
+
+The native preview also ships `.mcp.native.json`, which launches
+`scripts/run_native_mcp.ps1`. The wrapper builds the executable if missing,
+redirects build logs to stderr, and leaves stdout reserved for MCP frames.
+
+Manual MCP config for a local native build:
+
+```json
+{
+  "mcpServers": {
+    "autocad-native": {
+      "command": "C:\\path\\to\\autocad-mcp\\cpp\\build\\autocad-mcp-native.exe",
+      "env": { "AUTOCAD_MCP_BACKEND": "auto" }
+    }
+  }
+}
+```
+
+The Claude plugin still launches the Python server by default until native
+SQLite project indexing, library catalog/import, live AutoCAD Express Tools
+parity, and the remaining advanced drafting edge cases are complete.
 
 ## Prerequisites
 

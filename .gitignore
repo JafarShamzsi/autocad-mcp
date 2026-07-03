@@ -90,6 +90,11 @@ asset-library/vendor/
 .vs/
 *.sln.docstates
 
+# Native C++ build artifacts
+cpp/build/
+*.obj
+*.pdb
+
 # pytest
 .pytest_cache/
 
